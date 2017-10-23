@@ -1,0 +1,32 @@
+<html>
+<head>
+<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var socket=io.connect();
+			var score = 0;
+			$('#game_button').click(function(){
+				score++;
+				socket.emit("button_clicked",{score:score});
+			});
+			socket.on("score",function(response){
+				console.log(response);
+				console.log(response.score);
+				$("#score").html(response.score.score);
+			});
+			$('#reset').click(function(){
+				score = 0;
+				socket.emit("reset_clicked",{score:score});
+			});
+		})
+	</script>
+</head>
+<body>
+	<h1>The button has been pushed <span id="score">0</span> times(s)</h1>
+	<p>Push the buttono to update the count!</p>
+	<button id="game_button">Push the epic button</button>
+	<button id="reset">Reset count</button>
+</body>
+</html>
